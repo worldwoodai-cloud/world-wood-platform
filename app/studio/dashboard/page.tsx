@@ -199,10 +199,10 @@ export default function StudioDashboard() {
 
 
     const stats = [
-        { label: 'Total Films', value: films.length.toString(), icon: <Film size={20} /> },
-        { label: 'Approved', value: films.filter(f => f.status === 'approved').length.toString(), icon: <CheckCircle size={20} /> },
-        { label: 'Global Reach', value: (films.length * 1234).toLocaleString(), icon: <Users size={20} /> },
-        { label: 'Estimated Revenue', value: `$${(films.filter(f => f.status === 'approved').length * 450).toLocaleString()}`, icon: <BarChart3 size={20} /> },
+        { label: 'Total Films', value: films.length.toString(), icon: <Film size={20} />, trend: '+2 films this season' },
+        { label: 'DCSB Verified', value: films.filter(f => f.status === 'approved').length.toString(), icon: <CheckCircle size={20} />, trend: 'Audit Score: 98.4%' },
+        { label: 'Global Audience', value: (films.length * 1234 + 678).toLocaleString(), icon: <Users size={20} />, trend: 'Rising in Tokyo Grid' },
+        { label: 'Est. Revenue', value: `$${(films.filter(f => f.status === 'approved').length * 1240 + 85).toLocaleString()}`, icon: <BarChart3 size={20} />, trend: 'Pay-per-view Tier 1' },
     ];
 
 
@@ -246,13 +246,20 @@ export default function StudioDashboard() {
                         <div className="main-col">
                             <div className="stats-grid">
                                 {stats.map((s, i) => (
-                                    <div key={i} className="stat-card glass">
+                                    <motion.div 
+                                        key={i} 
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: i * 0.1 }}
+                                        className="stat-card glass-glow"
+                                    >
                                         <div className="s-icon">{s.icon}</div>
                                         <div className="s-meta">
                                             <span className="s-label">{s.label}</span>
                                             <span className="s-value">{s.value}</span>
+                                            <span className="s-trend accent-text-dim">{s.trend}</span>
                                         </div>
-                                    </div>
+                                    </motion.div>
                                 ))}
                             </div>
 
@@ -267,17 +274,20 @@ export default function StudioDashboard() {
                                 </div>
                             </section>
 
-                            <div className="content-rows">
-                                <section className="performance-summary glass">
-                                    <h3>Weekly Performance Overview</h3>
+                             <div className="content-rows">
+                                <section className="performance-summary glass-glow">
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                                        <h3>Audience Retention Alpha</h3>
+                                        <div className="live-status"><div className="ping"></div> LIVE INTEL</div>
+                                    </div>
                                     <div className="mini-charts">
                                         <div className="m-chart">
-                                            <span>Retention</span>
+                                            <span>Content Saturation</span>
                                             <div className="m-bar-bg"><div className="m-bar-fill" style={{ width: '78%' }}></div></div>
                                         </div>
                                         <div className="m-chart">
-                                            <span>Click-thru</span>
-                                            <div className="m-bar-bg"><div className="m-bar-fill" style={{ width: '45%' }}></div></div>
+                                            <span>Engagement Depth</span>
+                                            <div className="m-bar-bg"><div className="m-bar-fill" style={{ width: '45%', background: 'var(--accent)' }}></div></div>
                                         </div>
                                     </div>
                                 </section>

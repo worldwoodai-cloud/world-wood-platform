@@ -1,10 +1,11 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import Hero from '@/components/Hero';
 import FilmCard from '@/components/FilmCard';
 import HallCard from '@/components/HallCard';
 import Link from 'next/link';
-import { ArrowRight, Calendar, Trophy } from 'lucide-react';
+import { ArrowRight, Calendar, Trophy, Sparkles } from 'lucide-react';
 
 export default function Home() {
   const nowScreening = [
@@ -25,6 +26,25 @@ export default function Home() {
     { id: 'horror', name: 'Horror & Dark Cinema', description: 'The psychological depths of fear, suspense, and the supernatural.', poster: '/horror-hall.png' },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  };
+
   return (
     <div className="home-page">
       <Hero imageUrl="/hero.png" />
@@ -32,7 +52,13 @@ export default function Home() {
       <div className="main-layout container">
         <div className="primary-col">
           {/* Now Screening */}
-          <section className="section-block">
+          <motion.section 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={containerVariants}
+            className="section-block"
+          >
             <div className="block-header">
               <h2 className="block-title">Now <span className="text-gradient">Screening</span></h2>
               <div className="live-pill">
@@ -42,28 +68,43 @@ export default function Home() {
             </div>
             <div className="film-grid">
               {nowScreening.map(film => (
-                <FilmCard key={film.id} {...film} />
+                <motion.div key={film.id} variants={itemVariants}>
+                  <FilmCard {...film} />
+                </motion.div>
               ))}
             </div>
-          </section>
+          </motion.section>
 
           {/* Featured Halls */}
-          <section className="section-block">
+          <motion.section 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={containerVariants}
+            className="section-block"
+          >
             <div className="block-header">
               <h2 className="block-title">Elite <span className="text-gradient">Halls</span></h2>
               <Link href="/halls" className="link-action">Explore All <ArrowRight size={16} /></Link>
             </div>
             <div className="hall-grid">
               {halls.map(hall => (
-                <HallCard key={hall.id} {...hall} />
+                <motion.div key={hall.id} variants={itemVariants}>
+                  <HallCard {...hall} />
+                </motion.div>
               ))}
             </div>
-          </section>
+          </motion.section>
         </div>
 
         <aside className="secondary-col">
           {/* Today's Schedule */}
-          <section className="side-panel glass">
+          <motion.section 
+            initial={{ opacity: 0.5, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="side-panel glass-glow"
+          >
             <div className="panel-header">
               <Calendar size={20} className="accent-text" />
               <h3>Cinema Schedule</h3>
@@ -80,10 +121,16 @@ export default function Home() {
               ))}
             </div>
             <Link href="/schedule" className="btn-panel-action">View Full Calendar</Link>
-          </section>
+          </motion.section>
 
           {/* Studio Rankings */}
-          <section className="side-panel glass">
+          <motion.section 
+            initial={{ opacity: 0.5, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="side-panel glass-glow"
+          >
             <div className="panel-header">
               <Trophy size={20} className="accent-text" />
               <h3>Studio Rankings</h3>
@@ -101,7 +148,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-          </section>
+          </motion.section>
         </aside>
       </div>
 
@@ -113,7 +160,7 @@ export default function Home() {
             <h2 className="tech-title">Mastering the <span className="text-gradient">8K Frontier</span></h2>
             <p className="tech-desc">Our proprietary rendering engine delivers uncompressed RAW cinematic streams with spatial audio architecture.</p>
             <div className="tech-badges">
-              <div className="t-badge">RAW VIDEO</div>
+              <div className="t-badge"><Sparkles size={12} style={{ display: 'inline', marginRight: '5px' }} /> RAW VIDEO</div>
               <div className="t-badge">SPATIAL AUDIO</div>
               <div className="t-badge">ULTRA LATENCY</div>
             </div>
