@@ -23,8 +23,8 @@ export default function Navbar() {
   const [language, setLanguage] = useState('English');
   const [restricted, setRestricted] = useState(false);
   const [location, setLocation] = useState('India');
-  const menuRef = useRef<HTMLDivElement>(null);
-  const userMenuRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<any>(null);
+  const userMenuRef = useRef<any>(null);
   const [hasStudio, setHasStudio] = useState(false);
 
   useEffect(() => {
