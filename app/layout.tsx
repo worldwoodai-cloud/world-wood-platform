@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+// Deployment Sync: 2026-04-15
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import "./mobile.css";
