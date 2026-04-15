@@ -277,7 +277,7 @@ export default function FeedPage() {
           }));
           setDynamicFeedItems(prev => {
               // Merge avoiding duplicates
-              const filtered = transformed.filter(t => !prev.find(p => p.id === t.id));
+              const filtered = transformed.filter((t: any) => !prev.find((p: any) => p.id === t.id));
               return [...filtered, ...prev];
           });
         }
@@ -322,7 +322,7 @@ export default function FeedPage() {
             });
 
             setDynamicFeedItems(prev => {
-                const filtered = transformed.filter(t => !prev.find(p => p.id === t.id));
+                const filtered = transformed.filter((t: any) => !prev.find((p: any) => p.id === t.id));
                 return [...filtered, ...prev];
             });
           }

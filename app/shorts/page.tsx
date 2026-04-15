@@ -208,7 +208,7 @@ export default function ShortsPage() {
           }));
 
           setDynamicShorts(prev => {
-              const filtered = transformed.filter(t => !prev.find(p => p.id === t.id));
+              const filtered = transformed.filter((t: any) => !prev.find((p: any) => p.id === t.id));
               return [...filtered, ...prev];
           });
         }
