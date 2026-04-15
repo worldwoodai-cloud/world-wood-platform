@@ -15,8 +15,29 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+
   const router = useRouter();
   const supabase = createClient();
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/callback?next=/profile/edit`,
+      });
+      if (error) throw error;
+      setResetSent(true);
+    } catch (err: any) {
+      setError(err.message || 'Failed to send reset email.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,60 +94,112 @@ export default function AuthPage() {
       <div className="auth-container glass">
         <div className="auth-header">
           <div className="logo">WORLD <span>WOOD</span></div>
-          <h1>{isLogin ? 'Welcome Back' : 'Join the Cinema'}</h1>
-          <p>{isLogin ? 'Sign in to access your cinema experience.' : 'Create your digital cinema identity.'}</p>
+          <h1>
+            {isForgotPassword 
+              ? 'Reset Password' 
+              : isLogin ? 'Welcome Back' : 'Join the Cinema'}
+          </h1>
+          <p>
+            {isForgotPassword 
+              ? 'Enter your email to receive a recovery link.'
+              : isLogin ? 'Sign in to access your cinema experience.' : 'Create your digital cinema identity.'}
+          </p>
         </div>
 
-        <form onSubmit={handleAuth} className="auth-form">
-          {!isLogin && (
+        {isForgotPassword ? (
+          <form onSubmit={handleForgotPassword} className="auth-form">
+            {!resetSent ? (
+              <>
+                <div className="input-group">
+                  <label><Mail size={16} /> Email Address</label>
+                  <input
+                    type="email"
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                {error && <div className="error-msg">{error}</div>}
+                <button type="submit" className="btn-primary full-width" disabled={loading}>
+                  {loading ? 'Sending...' : 'Send Recovery Link'}
+                </button>
+              </>
+            ) : (
+              <div className="success-state">
+                <CheckCircle size={48} className="success-icon" />
+                <p>Recovery link sent to <strong>{email}</strong>. Check your inbox to reset your password.</p>
+              </div>
+            )}
+            <button 
+              type="button" 
+              onClick={() => { setIsForgotPassword(false); setResetSent(false); }} 
+              className="toggle-btn"
+              style={{ marginTop: '1rem' }}
+            >
+              Back to Login
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleAuth} className="auth-form">
+            {!isLogin && (
+              <div className="input-group">
+                <label><User size={16} /> Display Name</label>
+                <input
+                  type="text"
+                  placeholder="How should we call you?"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  required
+                />
+              </div>
+            )}
+
             <div className="input-group">
-              <label><User size={16} /> Display Name</label>
+              <label><Mail size={16} /> Email Address</label>
               <input
-                type="text"
-                placeholder="How should we call you?"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
+                type="email"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
-          )}
 
-          <div className="input-group">
-            <label><Mail size={16} /> Email Address</label>
-            <input
-              type="email"
-              placeholder="name@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+            <div className="input-group">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
+                <label style={{ margin: 0 }}><Lock size={16} /> Password</label>
+                <button 
+                  type="button" 
+                  className="forgot-link"
+                  onClick={() => setIsForgotPassword(true)}
+                >
+                  Forgot Password?
+                </button>
+              </div>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required={!isForgotPassword}
+              />
+            </div>
 
-          <div className="input-group">
-            <label><Lock size={16} /> Password</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+            {error && <div className="error-msg">{error}</div>}
 
-          {/* Role selector removed - all users join as audience by default */}
-
-
-          {error && <div className="error-msg">{error}</div>}
-
-          <button type="submit" className="btn-primary full-width" disabled={loading}>
-            {loading ? 'Processing...' : isLogin ? 'Sign In' : 'Create Account'}
-          </button>
-        </form>
+            <button type="submit" className="btn-primary full-width" disabled={loading}>
+              {loading ? 'Processing...' : isLogin ? 'Sign In' : 'Create Account'}
+            </button>
+          </form>
+        )}
 
         <div className="auth-footer">
-          <button onClick={() => setIsLogin(!isLogin)} className="toggle-btn">
-            {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
-          </button>
+          {!isForgotPassword && (
+            <button onClick={() => setIsLogin(!isLogin)} className="toggle-btn">
+              {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
+            </button>
+          )}
 
           <div className="demo-access" style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             <p style={{ fontSize: '0.75rem', color: '#555', marginBottom: '1rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>Internal Testing</p>
@@ -140,7 +213,7 @@ export default function AuthPage() {
               <ShieldCheck size={18} /> Run DCSB Admin Mode
             </button>
           </div>
-
+        </div>
         </div>
       </div>
 
@@ -209,6 +282,37 @@ export default function AuthPage() {
           outline: none;
           background: rgba(0,0,0,0.6);
           box-shadow: 0 0 15px rgba(255,27,28,0.1);
+        }
+
+        .forgot-link {
+          font-size: 0.75rem;
+          color: var(--accent);
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          opacity: 0.7;
+        }
+        .forgot-link:hover {
+          opacity: 1;
+          text-decoration: underline;
+        }
+
+        .success-state {
+          text-align: center;
+          padding: 2rem;
+          background: rgba(0, 255, 136, 0.05);
+          border-radius: 16px;
+          border: 1px solid rgba(0, 255, 136, 0.1);
+        }
+        .success-icon {
+          color: #00ff88;
+          margin-bottom: 1.5rem;
+          filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.3));
+        }
+        .success-state p {
+          font-size: 0.95rem;
+          color: #ccc;
+          line-height: 1.6;
         }
 
         .role-selector label {
