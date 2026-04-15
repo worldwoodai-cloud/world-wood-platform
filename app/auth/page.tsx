@@ -33,7 +33,7 @@ export default function AuthPage() {
       if (error) throw error;
       setResetSent(true);
     } catch (err: any) {
-      setError(err.message || 'Failed to send reset email.');
+      setError(err.message || 'Failed to send recovery email. Please check your Supabase SMTP settings.');
     } finally {
       setLoading(false);
     }
