@@ -90,130 +90,131 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-container glass">
-        <div className="auth-header">
-          <div className="logo">WORLD <span>WOOD</span></div>
-          <h1>
-            {isForgotPassword 
-              ? 'Reset Password' 
-              : isLogin ? 'Welcome Back' : 'Join the Cinema'}
-          </h1>
-          <p>
-            {isForgotPassword 
-              ? 'Enter your email to receive a recovery link.'
-              : isLogin ? 'Sign in to access your cinema experience.' : 'Create your digital cinema identity.'}
-          </p>
-        </div>
+    <>
+      <div className="auth-page">
+        <div className="auth-container glass">
+          <div className="auth-header">
+            <div className="logo">WORLD <span>WOOD</span></div>
+            <h1>
+              {isForgotPassword 
+                ? 'Reset Password' 
+                : isLogin ? 'Welcome Back' : 'Join the Cinema'}
+            </h1>
+            <p>
+              {isForgotPassword 
+                ? 'Enter your email to receive a recovery link.'
+                : isLogin ? 'Sign in to access your cinema experience.' : 'Create your digital cinema identity.'}
+            </p>
+          </div>
 
-        {isForgotPassword ? (
-          <form onSubmit={handleForgotPassword} className="auth-form">
-            {!resetSent ? (
-              <>
+          {isForgotPassword ? (
+            <form onSubmit={handleForgotPassword} className="auth-form">
+              {!resetSent ? (
+                <>
+                  <div className="input-group">
+                    <label><Mail size={16} /> Email Address</label>
+                    <input
+                      type="email"
+                      placeholder="name@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  {error && <div className="error-msg">{error}</div>}
+                  <button type="submit" className="btn-primary full-width" disabled={loading}>
+                    {loading ? 'Sending...' : 'Send Recovery Link'}
+                  </button>
+                </>
+              ) : (
+                <div className="success-state">
+                  <CheckCircle size={48} className="success-icon" />
+                  <p>Recovery link sent to <strong>{email}</strong>. Check your inbox to reset your password.</p>
+                </div>
+              )}
+              <button 
+                type="button" 
+                onClick={() => { setIsForgotPassword(false); setResetSent(false); }} 
+                className="toggle-btn"
+                style={{ marginTop: '1rem' }}
+              >
+                Back to Login
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleAuth} className="auth-form">
+              {!isLogin && (
                 <div className="input-group">
-                  <label><Mail size={16} /> Email Address</label>
+                  <label><User size={16} /> Display Name</label>
                   <input
-                    type="email"
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    type="text"
+                    placeholder="How should we call you?"
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
                     required
                   />
                 </div>
-                {error && <div className="error-msg">{error}</div>}
-                <button type="submit" className="btn-primary full-width" disabled={loading}>
-                  {loading ? 'Sending...' : 'Send Recovery Link'}
-                </button>
-              </>
-            ) : (
-              <div className="success-state">
-                <CheckCircle size={48} className="success-icon" />
-                <p>Recovery link sent to <strong>{email}</strong>. Check your inbox to reset your password.</p>
-              </div>
-            )}
-            <button 
-              type="button" 
-              onClick={() => { setIsForgotPassword(false); setResetSent(false); }} 
-              className="toggle-btn"
-              style={{ marginTop: '1rem' }}
-            >
-              Back to Login
-            </button>
-          </form>
-        ) : (
-          <form onSubmit={handleAuth} className="auth-form">
-            {!isLogin && (
+              )}
+
               <div className="input-group">
-                <label><User size={16} /> Display Name</label>
+                <label><Mail size={16} /> Email Address</label>
                 <input
-                  type="text"
-                  placeholder="How should we call you?"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
+                  type="email"
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
-            )}
 
-            <div className="input-group">
-              <label><Mail size={16} /> Email Address</label>
-              <input
-                type="email"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="input-group">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
-                <label style={{ margin: 0 }}><Lock size={16} /> Password</label>
-                <button 
-                  type="button" 
-                  className="forgot-link"
-                  onClick={() => setIsForgotPassword(true)}
-                >
-                  Forgot Password?
-                </button>
+              <div className="input-group">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
+                  <label style={{ margin: 0 }}><Lock size={16} /> Password</label>
+                  <button 
+                    type="button" 
+                    className="forgot-link"
+                    onClick={() => setIsForgotPassword(true)}
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required={!isForgotPassword}
+                />
               </div>
-              <input
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required={!isForgotPassword}
-              />
-            </div>
 
-            {error && <div className="error-msg">{error}</div>}
+              {error && <div className="error-msg">{error}</div>}
 
-            <button type="submit" className="btn-primary full-width" disabled={loading}>
-              {loading ? 'Processing...' : isLogin ? 'Sign In' : 'Create Account'}
-            </button>
-          </form>
-        )}
-
-        <div className="auth-footer">
-          {!isForgotPassword && (
-            <button onClick={() => setIsLogin(!isLogin)} className="toggle-btn">
-              {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
-            </button>
+              <button type="submit" className="btn-primary full-width" disabled={loading}>
+                {loading ? 'Processing...' : isLogin ? 'Sign In' : 'Create Account'}
+              </button>
+            </form>
           )}
 
-          <div className="demo-access" style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-            <p style={{ fontSize: '0.75rem', color: '#555', marginBottom: '1rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>Internal Testing</p>
-            <button 
-              onClick={handleDemoAdmin}
-              className="btn-glass" 
-              style={{ width: '100%', padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem', opacity: 0.6, transition: '0.3s' }}
-              onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
-              onMouseLeave={(e) => e.currentTarget.style.opacity = '0.6'}
-            >
-              <ShieldCheck size={18} /> Run DCSB Admin Mode
-            </button>
+          <div className="auth-footer">
+            {!isForgotPassword && (
+              <button onClick={() => setIsLogin(!isLogin)} className="toggle-btn">
+                {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
+              </button>
+            )}
+
+            <div className="demo-access" style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+              <p style={{ fontSize: '0.75rem', color: '#555', marginBottom: '1rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>Internal Testing</p>
+              <button 
+                onClick={handleDemoAdmin}
+                className="btn-glass" 
+                style={{ width: '100%', padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem', opacity: 0.6, transition: '0.3s' }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '0.6'}
+              >
+                <ShieldCheck size={18} /> Run DCSB Admin Mode
+              </button>
+            </div>
           </div>
-        </div>
         </div>
       </div>
 
@@ -291,6 +292,10 @@ export default function AuthPage() {
           text-transform: uppercase;
           letter-spacing: 0.5px;
           opacity: 0.7;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0;
         }
         .forgot-link:hover {
           opacity: 1;
@@ -367,11 +372,14 @@ export default function AuthPage() {
           font-size: 0.9rem;
           color: var(--grey);
           font-weight: 600;
+          background: none;
+          border: none;
+          cursor: pointer;
         }
         .toggle-btn:hover {
           color: white;
         }
       `}</style>
-    </div>
+    </>
   );
 }
