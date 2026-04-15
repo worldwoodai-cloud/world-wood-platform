@@ -1,0 +1,367 @@
+:root {
+  --background: #050505;
+  --surface: #0a0a0a;
+  --surface-hover: #121212;
+  --foreground: #ffffff;
+  --accent: #FF1B1C;
+  --accent-glow: rgba(255, 27, 28, 0.4);
+  --cyan: #00f2ff;
+  --cyan-glow: rgba(0, 242, 255, 0.3);
+  --grey: #a1a1a1;
+  --grey-dark: #1f1f1f;
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --font-outfit: 'Outfit', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter);
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-outfit);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  background: none;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+/* ── Layout ── */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 4rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 2rem;
+  }
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #fff 0%, #fff 40%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.accent-text {
+  color: var(--accent);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  padding: 0.75rem 1.75rem;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid transparent;
+  box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.btn-primary:hover {
+  background: #ff3c3d;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--accent-glow);
+}
+
+.btn-glass {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: white;
+  padding: 0.75rem 1.75rem;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  backdrop-filter: blur(10px);
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Cinema Card */
+.film-card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 2/3;
+  cursor: pointer;
+  background: var(--surface);
+  transition: var(--transition);
+}
+
+.film-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.film-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.film-card .overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 60%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  opacity: 0.9;
+  transition: var(--transition);
+}
+
+/* Layout Parts */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 3rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+  transition: var(--transition);
+}
+
+.nav-bar.scrolled {
+  background: var(--background);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.logo span {
+  color: white;
+}
+
+/* Footer Styles */
+.cinema-footer {
+  background: var(--surface);
+  padding: 5rem 0 2rem;
+  margin-top: 5rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4rem;
+}
+
+.footer-logo {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--accent);
+}
+
+.footer-logo span {
+  color: white;
+}
+
+.footer-logo p {
+  font-size: 0.9rem;
+  color: var(--grey);
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+
+.footer-links {
+  display: flex;
+  gap: 5rem;
+}
+
+.footer-links h4 {
+  margin-bottom: 1.5rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--grey);
+}
+
+.footer-links div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.footer-links a {
+  font-size: 0.9rem;
+  color: white;
+  transition: var(--transition);
+}
+
+.footer-links a:hover {
+  color: var(--accent);
+}
+
+.footer-bottom {
+  padding-top: 2rem;
+  border-top: 1px solid var(--glass-border);
+  text-align: center;
+  color: var(--grey);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .footer-links {
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+}
+
+/* HallCard Shared Styles */
+.hall-card {
+  position: relative;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  display: block;
+  width: 100%;
+}
+
+.hall-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition);
+  opacity: 0.6;
+}
+
+.hall-card:hover img {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+.hall-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem;
+  opacity: 1;
+  transition: var(--transition);
+}
+
+.hall-card-name {
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.hall-card-desc {
+  font-size: 0.9rem;
+  color: var(--grey);
+  margin-bottom: 1.5rem;
+  max-width: 80%;
+}
+
+.hall-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: white;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.hall-card-count {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--grey);
+}
+
+.hall-card-explore {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: var(--transition);
+}
+
+.hall-card:hover .hall-card-explore {
+  opacity: 1;
+  transform: translateX(0);
+}
